@@ -28,9 +28,24 @@ The Invoice Management System is a React-based web application built to help bus
 - Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
 - Clone the repository: git clone <repository_url>
 - Navigate to the project directory: cd <project-directory>
-- Install dependencies: npm install
-- Build statics file: npm run build
-- Start the development server: npm start
+- Install dependencies:
+
+```bash
+npm install
+```
+
+- Build statics file:
+
+```bash
+npm run build
+```
+
+- Start the development server:
+
+```bash
+npm start
+```
+
 - At this point you can run npm start to see the example app at http://localhost:3000.
 - Run npm run clean to delete the example app.
 
