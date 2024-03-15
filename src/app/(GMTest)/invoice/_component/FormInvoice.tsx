@@ -5,19 +5,13 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import validateForm from './validation';
+import { useRouter } from 'next/navigation';
+import { FormErrors } from './FormInvoice.interface';
+import CircularProgress from '@mui/material/CircularProgress';
+import { InvoiceFormProps } from './InvoiceForm.interface';
 
-const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
-  interface FormErrors {
-    id?: number;
-    clientEmail?: string;
-    clientName?: string;
-    dueDate?: string;
-    quantity?: string;
-    unit?: string;
-    amount?: string;
-    number?: string;
-    // Add other form fields as needed
-  }
+const InvoiceForm: React.FC<InvoiceFormProps> = ({ formType, id }) => {
+  const router = useRouter();
   const [items, setItems] = useState([{ quantity: '', unit: '', amount: '' }]);
   const [invoiceNumber, setInvoiceNumber] = useState('');
   const [clientName, setClientName] = useState('');
@@ -25,12 +19,14 @@ const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
   const [clientEmail, setClientEmail] = useState('');
   const [notes, setNotes] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
-  const [showSuccessNotification, setShowSuccessNotification] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   const generateUniqueId = (): string => {
     const timestamp = new Date().getTime().toString(36); // Convert timestamp to base36 string
     const randomNumber = Math.random().toString(36).substr(2, 5); // Generate random string
     return timestamp + randomNumber; // Combine timestamp and random number
   };
+
   const addNewItem = () => {
     setItems([...items, { quantity: '', unit: '', amount: '' }]);
   };
@@ -40,19 +36,26 @@ const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
     newItems.splice(index, 1);
     setItems(newItems);
   };
+
   interface Item {
-    quantity: string;
-    unit: string;
-    amount: string;
+    quantity: number;
+    unit: number;
+    amount: number;
   }
 
   const handleItemChange = (index: number, key: keyof Item, value: string) => {
     const newItems = [...items];
-    newItems[index][key] = value;
+    newItems[index][key] = String(parseFloat(value)); // Convert value to a string
     setItems(newItems);
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: '',
+    }));
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
     const formDataObject = {
       id: generateUniqueId(),
       invoiceNumber,
@@ -63,15 +66,22 @@ const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
       items,
     };
 
-    const existingDataString = localStorage.getItem('formData');
-    const existingData = existingDataString
-      ? JSON.parse(existingDataString)
-      : [];
-    // Add the new form data to the existing array
-    const newData = [...existingData, formDataObject];
-
-    // Save the updated array to localStorage
-    localStorage.setItem('formData', JSON.stringify(newData));
+    const errors = validateForm(formDataObject);
+    if (Object.keys(errors).length === 0) {
+      // If no validation errors, proceed with form submission
+      const existingDataString = localStorage.getItem('formData');
+      const existingData = existingDataString
+        ? JSON.parse(existingDataString)
+        : [];
+      const newData = [...existingData, formDataObject];
+      localStorage.setItem('formData', JSON.stringify(newData));
+      router.push('/invoice');
+      setLoading(false);
+    } else {
+      // If there are validation errors, set them in the component state
+      setErrors(errors);
+      setLoading(false);
+    }
   };
 
   return (
@@ -148,8 +158,8 @@ const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
                 onChange={(e) =>
                   handleItemChange(index, 'quantity', e.target.value)
                 }
-                error={!!errors.number}
-                helperText={errors.number}
+                error={!!errors?.quantity}
+                helperText={errors?.quantity}
               />
             </Grid>
             <Grid item xs={3}>
@@ -160,8 +170,8 @@ const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
                 onChange={(e) =>
                   handleItemChange(index, 'unit', e.target.value)
                 }
-                error={!!errors.unit}
-                helperText={errors.unit}
+                error={!!errors?.unit}
+                helperText={errors?.unit}
               />
             </Grid>
             <Grid item xs={3}>
@@ -173,8 +183,8 @@ const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
                 onChange={(e) =>
                   handleItemChange(index, 'amount', e.target.value)
                 }
-                error={!!errors.amount}
-                helperText={errors.amount}
+                error={!!errors?.amount}
+                helperText={errors?.amount}
               />
             </Grid>
             <Grid item xs={2}>
@@ -203,4 +213,4 @@ const EditForm: React.FC<EditFormProps> = ({ formType, id }) => {
   );
 };
 
-export default EditForm;
+export default InvoiceForm;

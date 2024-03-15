@@ -1,9 +1,7 @@
-
 import { InvoiceFormData, FormErrors } from './types';
 
 const validateForm = (data: InvoiceFormData): FormErrors => {
   const errors: FormErrors = {};
-
   if (!data.invoiceNumber?.trim()) {
     errors.invoiceNumber = 'Invoice number is required';
   }
@@ -16,23 +14,17 @@ const validateForm = (data: InvoiceFormData): FormErrors => {
     errors.clientEmail = 'Client email is required';
   }
 
-  if (!data.number?.trim()) {
-    errors.number = 'Client email is required';
-  }
-  if (!data.amount?.trim()) {
-    errors.number = 'Client email is required';
-  }
-  if (!data.quantity?.trim()) {
-    errors.quantity = 'Client email is required';
-  }
-  if (!data.unit?.trim()) {
-    errors.unit = 'Client email is required';
-  }
-  if (!data?.dueDate) {
-    errors.dueDate = 'Due date is required';
-  }
+  // if (!parseInt(data.amount) || parseInt(data.amount) <= 0) {
+  //   errors.amount = 'Amount is required';
+  // } 
 
+  // if (!parseInt(data.quantity) || parseInt(data.quantity) <= 0) {
+  //   errors.quantity = 'Quantity is required';
+  // } 
 
+  // if (!parseInt(data.unit)  || parseInt(data.unit) <= 0) {
+  //   errors.unit = 'Unit is required';
+  // }
 
   return errors;
 };

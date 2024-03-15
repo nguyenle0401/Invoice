@@ -1,6 +1,6 @@
 'use client';
 import { Grid } from '@mui/material';
-import EditForm from '../_component/EditForm';
+import EditForm from '../_component/FormInvoice';
 import { useParams, usePathname } from 'next/navigation';
 import { Actions } from '../_const';
 
@@ -15,10 +15,6 @@ export default function Page() {
   return (
     <Grid container spacing={0}>
       <Grid item xs={12} lg={12}>
-        <p>
-          Post: {pathname}: {JSON.stringify(params)} || {isNewItem.toString()}
-          || {Actions[detailAction]}
-        </p>
         {detailAction === Actions.create ? (
           <EditForm formType={detailAction} />
         ) : null}

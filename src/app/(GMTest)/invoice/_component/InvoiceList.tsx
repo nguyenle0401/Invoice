@@ -59,7 +59,7 @@ const InvoiceList = () => {
   const removeInvoice = (id: number) => {
     const updatedInvoices = invoices.filter((invoice) => invoice.id !== id);
     setInvoices(updatedInvoices);
-    localStorage.setItem('invoices', JSON.stringify(updatedInvoices));
+    localStorage.setItem('formData', JSON.stringify(updatedInvoices));
   };
 
   const handleNameFilterChange = (
@@ -82,8 +82,7 @@ const InvoiceList = () => {
     const filtered = invoices.filter(
       (invoice) =>
         invoice.clientName.toLowerCase().includes(name.toLowerCase()) &&
-        (status === '' ||
-          invoice.priority.toLowerCase() === status.toLowerCase())
+        (status === '' || invoice.status.toLowerCase() === status.toLowerCase())
     );
     setFilteredInvoices(filtered);
   };
@@ -224,7 +223,16 @@ const InvoiceList = () => {
                     <TableCell>{invoice.clientName}</TableCell>
                     <TableCell>{invoice.clientEmail}</TableCell>
                     <TableCell align="center">
-                      <Chip label={invoice.status} />
+                      <Chip
+                        sx={{
+                          pl: '4px',
+                          pr: '4px',
+                          backgroundColor: '#4caf50',
+                          color: '#fff',
+                        }}
+                        size="small"
+                        label="Paid"
+                      />
                     </TableCell>
                     <TableCell>{calculateTotalUnits(invoice.items)}</TableCell>
                     <TableCell align="right">

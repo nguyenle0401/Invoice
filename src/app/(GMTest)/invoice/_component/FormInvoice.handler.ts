@@ -1,5 +1,5 @@
 import { Resolver } from "react-hook-form";
-import { IEditForm } from "./EditForm.interface";
+import { IEditForm } from "./FormInvoice.interface";
 
 export const resolver: Resolver<IEditForm> = async (values: IEditForm) => {
   return {
