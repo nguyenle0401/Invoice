@@ -8,7 +8,7 @@ import validateForm from './validation';
 import { useRouter } from 'next/navigation';
 import { FormErrors } from './FormInvoice.interface';
 import CircularProgress from '@mui/material/CircularProgress';
-import { InvoiceFormProps } from './InvoiceForm.interface';
+import { InvoiceFormProps } from './FormInvoice.interface';
 
 const InvoiceForm: React.FC<InvoiceFormProps> = ({ formType, id }) => {
   const router = useRouter();
@@ -64,6 +64,7 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ formType, id }) => {
       dueDate,
       notes,
       items,
+      status: 'Unpaid',
     };
 
     const errors = validateForm(formDataObject);
@@ -187,15 +188,17 @@ const InvoiceForm: React.FC<InvoiceFormProps> = ({ formType, id }) => {
                 helperText={errors?.amount}
               />
             </Grid>
-            <Grid item xs={2}>
-              <Button
-                variant="outlined"
-                color="secondary"
-                onClick={() => removeItem(index)}
-              >
-                Remove
-              </Button>
-            </Grid>
+            {items.length > 1 && (
+              <Grid item xs={2}>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => removeItem(index)}
+                >
+                  Remove
+                </Button>
+              </Grid>
+            )}
           </Grid>
         </Box>
       ))}

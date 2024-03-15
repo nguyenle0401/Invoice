@@ -32,7 +32,6 @@ const InvoiceList = () => {
     unit?: string;
     amount?: string;
     number?: string;
-    status: 'Paid' | 'Canceled' | 'Overdue' | 'Unpaid' | 'Refunded';
     items: {
       quantity: string;
       unit: string;
@@ -44,6 +43,7 @@ const InvoiceList = () => {
   const [filteredInvoices, setFilteredInvoices] = useState<InvoiceData[]>([]);
   const [nameFilter, setNameFilter] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [status, setStatus] = useState('Unpaid');
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -81,8 +81,9 @@ const InvoiceList = () => {
   const filterInvoices = (name: string, status: string) => {
     const filtered = invoices.filter(
       (invoice) =>
-        invoice.clientName.toLowerCase().includes(name.toLowerCase()) &&
-        (status === '' || invoice.status.toLowerCase() === status.toLowerCase())
+        invoice?.clientName?.toLowerCase().includes(name.toLowerCase()) &&
+        (status === '' ||
+          invoice.status?.toLowerCase() === status.toLowerCase())
     );
     setFilteredInvoices(filtered);
   };
@@ -104,9 +105,9 @@ const InvoiceList = () => {
         },
         'BKvWbY7mfMbjqfEL9'
       );
-      console.log('Email sent successfully');
+      alert('Email sent successfully');
     } catch (error) {
-      console.error('Error sending email:', error);
+      console.log('Error sending email:', error);
     } finally {
       setLoading(false);
     }
@@ -143,6 +144,7 @@ const InvoiceList = () => {
               value={nameFilter}
               onChange={handleNameFilterChange}
               sx={{ mr: 2 }}
+              size="small"
             />
             <FormControl variant="outlined">
               <Select
@@ -151,11 +153,13 @@ const InvoiceList = () => {
                 displayEmpty
                 inputProps={{ 'aria-label': 'Without label' }}
                 sx={{ minWidth: 120 }}
+                size="small"
               >
                 <MenuItem value="">All Status</MenuItem>
                 <MenuItem value="Paid">Paid</MenuItem>
                 <MenuItem value="Canceled">Canceled</MenuItem>
                 <MenuItem value="Overdue">Overdue</MenuItem>
+                <MenuItem value="Unpaid">Unpaid</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -227,11 +231,11 @@ const InvoiceList = () => {
                         sx={{
                           pl: '4px',
                           pr: '4px',
-                          backgroundColor: '#4caf50',
+                          backgroundColor: 'red',
                           color: '#fff',
                         }}
                         size="small"
-                        label="Paid"
+                        label={status}
                       />
                     </TableCell>
                     <TableCell>{calculateTotalUnits(invoice.items)}</TableCell>

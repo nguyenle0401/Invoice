@@ -6,6 +6,7 @@ A web application for managing invoices and sending email notifications to clien
 
 - [Introduction](#introduction)
 - [Features](#features)
+- [Quick start](#license)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -21,6 +22,15 @@ The Invoice Management System is a React-based web application built to help bus
 - Filter invoices by client name and status (Paid, Canceled, Overdue, Unpaid).
 - Send email notifications to clients regarding their invoices.
 - Pagination support for managing large lists of invoices.
+
+## Quick start
+
+- Make sure that you have Node.js v8.15.1 and npm v5 or above installed.
+- Clone this repo using git clone git clone https://github.com/nguyenle0401/Invoice.git
+- Move to the appropriate directory: cd Invoice.git.
+- Run npm run setup in order to install dependencies and clean the git repo.
+- At this point you can run npm start to see the example app at http://localhost:3000.
+- Run npm run clean to delete the example app.
 
 ## Contributing
 
